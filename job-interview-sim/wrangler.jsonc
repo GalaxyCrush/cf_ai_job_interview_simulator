@@ -30,7 +30,12 @@
     ]
   },
   "migrations": [
-    {"tag": "v1", "new_classes": [ "InterviewSession"]}
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "InterviewSession"
+      ]
+    }
   ]
   /**
    * Smart Placement
