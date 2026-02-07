@@ -4,10 +4,11 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, History } from 'lucide-react';
 
 interface SessionStartProps {
     onSessionStart: (sessionId: string, jobArea: string, candidateName: string) => void;
+    onViewSessions: () => void;
 }
 
 const JOB_AREAS = [
@@ -21,7 +22,7 @@ const JOB_AREAS = [
     'Mobile Developer',
 ];
 
-export default function SessionStart({ onSessionStart }: SessionStartProps) {
+export default function SessionStart({ onSessionStart, onViewSessions }: SessionStartProps) {
     const [candidateName, setCandidateName] = useState('');
     const [jobArea, setJobArea] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -116,6 +117,17 @@ export default function SessionStart({ onSessionStart }: SessionStartProps) {
                         ) : (
                             'Start Interview'
                         )}
+                    </Button>
+
+                    { }
+                    <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={onViewSessions}
+                        disabled={isLoading}
+                    >
+                        <History className="mr-2 h-4 w-4" />
+                        View Previous Sessions
                     </Button>
                 </CardContent>
             </Card>

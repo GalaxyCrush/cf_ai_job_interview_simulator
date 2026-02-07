@@ -1,12 +1,20 @@
 // src/App.tsx
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SessionStart from './components/SessionStart';
 import ChatInterface from './components/ChatInterface';
 import FeedbackPanel from './components/FeedbackPanel';
+import SessionList from './components/SessionList';
 import "./App.css";
 
-type AppState = "start" | "chat" | "feedback";
+type AppState = 'start' | 'chat' | 'feedback' | 'sessions';
+
+interface Session {
+	sessionId: string;
+	jobArea: string;
+	candidateName: string;
+	createdAt: string;
+}
 
 
 function App() {
@@ -15,34 +23,34 @@ function App() {
 	const [jobArea, setJobArea] = useState<string>('');
 	const [candidateName, setCandidateName] = useState<string>('');
 
-	// Load session from localstorage
-	useEffect(() => {
-		const savedSessionId = localStorage.getItem("sessionId");
-		const savedJobArea = localStorage.getItem("jobArea");
-		const savedCandidateName = localStorage.getItem("candidateName");
-
-		if (savedCandidateName && savedJobArea && savedSessionId) {
-			setSessionId(savedSessionId);
-			setJobArea(savedJobArea);
-			setCandidateName(savedCandidateName);
-			setCurrentState("chat");
-		}
-	}, []);
-
-	const handleSessionStart = (id: string, jobArea: string, candidateName: string) => {
+	const handleSessionStart = (id: string, area: string, name: string) => {
 		setSessionId(id);
-		setJobArea(jobArea);
-		setCandidateName(candidateName);
+		setJobArea(area);
+		setCandidateName(name);
 
-		localStorage.setItem("sessionId", id);
-		localStorage.setItem("jobArea", jobArea);
-		localStorage.setItem("candidateName", candidateName);
+		const sessions: Session[] = JSON.parse(localStorage.getItem('sessions') || '[]');
+		sessions.unshift({
+			sessionId: id,
+			jobArea: area,
+			candidateName: name,
+			createdAt: new Date().toISOString(),
+		});
 
-		setCurrentState("chat");
+		if (sessions.length > 10) {
+			sessions.pop();
+		}
+
+		localStorage.setItem('sessions', JSON.stringify(sessions));
+
+		setCurrentState('chat');
 	};
 
 	const handleEndInterview = () => {
-		setCurrentState("feedback");
+		setCurrentState('feedback');
+	};
+
+	const handleViewSessions = () => {
+		setCurrentState('sessions');
 	};
 
 	const handleStartNew = () => {
@@ -57,11 +65,32 @@ function App() {
 		setCurrentState("start");
 	};
 
+	const handleBackToStart = () => {
+		setCurrentState('start');
+	};
+
+	const handleLoadSession = (session: Session) => {
+		setSessionId(session.sessionId);
+		setJobArea(session.jobArea);
+		setCandidateName(session.candidateName);
+		setCurrentState('chat');
+	};
+
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
 			<div className="container mx-auto px-4 py-8">
 				{currentState === 'start' && (
-					<SessionStart onSessionStart={handleSessionStart} />
+					<SessionStart
+						onSessionStart={handleSessionStart}
+						onViewSessions={handleViewSessions}
+					/>
+				)}
+
+				{currentState === 'sessions' && (
+					<SessionList
+						onLoadSession={handleLoadSession}
+						onBack={handleBackToStart}
+					/>
 				)}
 
 				{currentState === 'chat' && sessionId && (
@@ -70,6 +99,7 @@ function App() {
 						jobArea={jobArea}
 						candidateName={candidateName}
 						onEndInterview={handleEndInterview}
+						onBackToStart={handleStartNew}
 					/>
 				)}
 

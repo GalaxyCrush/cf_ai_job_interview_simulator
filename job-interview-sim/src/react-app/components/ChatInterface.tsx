@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
-import { Send, Loader2, Flag } from 'lucide-react';
+import { Send, Loader2, Flag, ArrowLeft } from 'lucide-react';
 
 interface ChatInterfaceProps {
     sessionId: string;
     jobArea: string;
     candidateName: string;
     onEndInterview: () => void;
+    onBackToStart: () => void;
 }
 
 export default function ChatInterface({
@@ -21,6 +22,7 @@ export default function ChatInterface({
     jobArea,
     candidateName,
     onEndInterview,
+    onBackToStart,
 }: ChatInterfaceProps) {
     const [input, setInput] = useState('');
     const { messages, loading, error, sendMessage, messagesEndRef } = useChat(sessionId);
@@ -42,13 +44,20 @@ export default function ChatInterface({
         <Card className="max-w-4xl mx-auto shadow-xl">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <div>
+                    {/* Return Button */}
+                    <Button variant="ghost" onClick={onBackToStart}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        New Interview
+                    </Button>
+
+                    <div className="flex-1 text-center">
                         <CardTitle className="text-2xl">AI Interview</CardTitle>
-                        <div className="flex gap-2 mt-2">
+                        <div className="flex gap-2 mt-2 justify-center">
                             <Badge variant="secondary">{candidateName}</Badge>
                             <Badge variant="outline">{jobArea}</Badge>
                         </div>
                     </div>
+
                     <Button variant="destructive" onClick={onEndInterview}>
                         <Flag className="mr-2 h-4 w-4" />
                         End Interview

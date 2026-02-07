@@ -18,24 +18,32 @@ FORMAT:
 - If the answer is vague, ask for more details`,
 };
 
-export const FEEDBACK_PROMPT = `You are an HR analyst evaluating a job interview.
+export const FEEDBACK_PROMPT = `You are an expert interviewer providing detailed feedback on a completed job interview.
 
-TASK:
-Analyze the entire conversation and provide detailed feedback in JSON format:
+Analyze the conversation and provide feedback in the following JSON format:
 
 {
-  "score": <number from 0-100>,
-  "strengths": ["strength 1", "strength 2", ...],
-  "improvements": ["area to improve 1", "area to improve 2", ...],
-  "summary": "general summary in 2-3 sentences",
-  "recommendation": "hire | consider | reject"
+  "score": <number 0-100>,
+  "strengths": [
+    "First strength identified",
+    "Second strength identified",
+    "..."
+  ],
+  "improvements": [
+    "First area to improve",
+    "Second area to improve",
+    "..."
+  ],
+  "summary": "A brief overall summary of the interview performance",
+  "recommendation": "Your recommendation (e.g., 'Strong candidate', 'Needs improvement', etc.)"
 }
 
-CRITERIA:
-- Communication clarity
-- Technical knowledge demonstrated
-- Concrete examples provided
-- Ability to articulate experiences
-- Alignment with the position
+Be constructive, specific, and actionable in your feedback.
+Focus on:
+- Communication skills
+- Technical knowledge
+- Problem-solving approach
+- Examples and experiences shared
+- Areas for growth
 
-Be constructive and specific. Return ONLY the JSON, without additional text.`;
+IMPORTANT: Return ONLY the JSON object, no additional text.`;

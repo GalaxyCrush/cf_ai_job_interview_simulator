@@ -7,10 +7,10 @@ interface Message {
 }
 
 interface SessionData {
-    sessionID: string;
+    sessionId: string;
     jobArea: string;
     candidateName: string;
-    createddAt: string;
+    createdAt: string;
     updatedAt: string;
 }
 
@@ -21,10 +21,10 @@ export class InterviewSession extends DurableObject<Env> {
 
     async initialize(jobArea: string, candidateName: string) : Promise<SessionData> {
         const sessionData = {
-            sessionID: this.ctx.id.toString(),
+            sessionId: this.ctx.id.toString(),
             jobArea,
             candidateName,
-            createddAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
 
