@@ -48,9 +48,7 @@ export interface FeedbackResponse {
   timestamp: string;
 }
 
-const API_BASE_URL = import.meta.env.DEV
-    ? "http://localhost:8787/api"
-    : "/api";
+const API_BASE_URL ="/api";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
